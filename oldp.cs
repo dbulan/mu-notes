@@ -1,3 +1,3 @@
 # nginx
 
-/usr/share/nginx/oldp.net/
+/usr/share/nginx/*
