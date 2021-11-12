@@ -141,3 +141,33 @@ Habr: https://habr.com/ru/post/505954/ part-2
 </div>
 
 // Текст введенный в input с атрибутом x-ref=«myInput» будет доступен в $refs.myInput.value
+
+
+# JQUERY
+
+// JQuery sort table by row attribute
+$('.achtable-sort').click(function(e) {
+	e.preventDefault();
+
+	var $table = $(this).closest('table');
+
+	var rows = $table.find('tr').get();
+    rows.sort(function(a, b) {
+        var keyA = parseInt($(a).attr('data-star1'));
+        var keyB = parseInt($(b).attr('data-star1'));
+        if (keyA < keyB) return 1;
+        if (keyA > keyB) return -1;
+        return 0;
+	});
+	
+	$.each(rows, function(index, row) {
+		$table.children('tbody').append(row);
+	});
+});
+
+# PHP DAYTIME
+
+$date = new DateTime();
+$date->modify('-30 days');
+
+$date->format('U') // UNIX
