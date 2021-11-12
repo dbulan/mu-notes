@@ -171,3 +171,25 @@ $date = new DateTime();
 $date->modify('-30 days');
 
 $date->format('U') // UNIX
+
+
+# MySQL Lock For Update
+
+mysqli_query($link, "BEGIN");
+list($serial) = mysqli_fetch_row(mysqli_query($link, "SELECT `serial` FROM `webserials` WHERE `serv` = '".$serv."' FOR UPDATE"));
+mysqli_query($link, "UPDATE `webserials` SET `serial` = `serial`+1 WHERE `serv` = '".$serv."'");
+mysqli_query($link, "COMMIT");
+
+# PHP IP SUB
+
+function isCidrMatched($ip, $range)
+{
+	list($subnet, $bits) = explode('/', $range);
+	$ip = ip2long($ip);
+	$subnet = ip2long($subnet);
+	$mask = -1 << (32 - $bits);
+	$subnet &= $mask;
+	
+	return ($ip & $mask) == $subnet;
+}
+if (!isCidrMatched($_SERVER['REMOTE_ADDR'], '54.175.255.192/27')) {}

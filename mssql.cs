@@ -28,3 +28,8 @@ CREATE TABLE [table] (
 # Alter Table
 
 ALTER TABLE [table] ADD [column] int NOT NULL DEFAULT((0))
+
+
+# Take/Skip
+
+SELECT * FROM [T_InGameShop_Log] ORDER BY [BuyDate] ASC OFFSET $skip ROWS FETCH NEXT $take ROWS ONLY
