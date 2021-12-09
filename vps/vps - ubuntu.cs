@@ -3,6 +3,9 @@ https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubunt
 
 # 2. Установка Nginx в Ubuntu 20.04
 https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-20-04-ru
+ 
+# 3. Установка Linux, Nginx, MySQL, PHP (стека LEMP) в Ubuntu 20.04
+https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mysql-php-lemp-stack-on-ubuntu-20-04-ru
 
 # ?. UFW Essentials: Common Firewall Rules and Commands
 https://www.digitalocean.com/community/tutorials/ufw-essentials-common-firewall-rules-and-commands
@@ -102,20 +105,20 @@ $ nano /var/www/your_domain/index.html
 */
 
 $ sudo nano /etc/nginx/sites-available/your_domain
-/*
-	server {
-        listen 80;
-        listen [::]:80;
+/**
+server {
+	listen 80;
+	listen [::]:80;
 
-        root /var/www/your_domain;
-        index index.html index.htm index.nginx-debian.html;
+	root /var/www/your_domain;
+	index index.html index.htm index.nginx-debian.html;
 
-        server_name your_domain www.your_domain;
+	server_name your_domain www.your_domain;
 
-        location / {
-                try_files $uri $uri/ =404;
-        }
+	location / {
+			try_files $uri $uri/ =404;
 	}
+}
 */
 
 /**
@@ -160,3 +163,45 @@ Nginx не будет использовать файлы конфигураци
 
 
 # ------------- 2 ------------- #
+
+# ------------- 3 ------------- #
+
+# Шаг 3 — Установка PHP
+$ sudo apt install php-fpm php-mysql
+
+# Шаг 4 — Настройка Nginx для использования процессора PHP
+$ sudo nano /etc/nginx/sites-available/your_domain
+/**
+server {
+	
+	listen 80;
+	listen [::]:80;
+
+	root /var/www/your_domain;
+	index index.html index.htm index.php;
+
+	server_name your_domain www.your_domain;
+
+	location / {
+		try_files $uri $uri/ =404;
+	}
+	
+	location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
+	}
+
+    location ~ /\.ht {
+        deny all;
+    }
+}
+*/
+
+$ sudo nginx -t
+$ sudo systemctl reload nginx
+
+$ sudo rm /var/www/your_domain/info.php // remove
+
+# Шаг 6 — Тестирование подключения к базе данных для PHP
+
+# ------------- 3 ------------- #
