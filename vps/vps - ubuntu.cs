@@ -7,6 +7,12 @@ https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-
 # 3. Установка Linux, Nginx, MySQL, PHP (стека LEMP) в Ubuntu 20.04
 https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mysql-php-lemp-stack-on-ubuntu-20-04-ru
 
+# 3.1. Установка MariaDB в Ubuntu 20.04 [Краткое руководство]
+https://www.digitalocean.com/community/tutorials/how-to-install-mariadb-on-ubuntu-20-04-quickstart-ru
+
+# 3.2. Установка MariaDB в Ubuntu 20.04
+https://www.digitalocean.com/community/tutorials/how-to-install-mariadb-on-ubuntu-20-04-ru
+
 # ?. UFW Essentials: Common Firewall Rules and Commands
 https://www.digitalocean.com/community/tutorials/ufw-essentials-common-firewall-rules-and-commands
 
@@ -165,6 +171,54 @@ Nginx не будет использовать файлы конфигураци
 # ------------- 2 ------------- #
 
 # ------------- 3 ------------- #
+
+# MariaDB
+$ sudo apt install mariadb-server // если mysql sudo apt install mysql-server
+
+$ sudo systemctl status mariadb
+$ sudo systemctl start mariadb
+
+# Настройка MariaDB
+Этот скрипт меняет ряд наименее защищенных опций, используемых по умолчанию, для таких функций, как, например, удаленный вход для пользователя root и тестовые пользователи.
+
+$ sudo mysql_secure_installation
+
+/**
+1) В первом диалоге вам нужно будет ввести пароль пользователя root для текущей базы данных. Поскольку мы еще не настроили его, нажмите ENTER, чтобы указать «отсутствует».
+2) В следующем диалоге вам будет предложено задать пароль для пользователя root базы данных. Введите N и нажмите ENTER
+3) Далее вы можете использовать клавиши Y и ENTER, чтобы принять ответы по умолчанию для всех последующих вопросов.
+
+Выбрав эти ответы, вы удалите ряд анонимных пользователей и тестовую базу данных, отключите возможность удаленного входа пользователя root и загрузите новые правила, чтобы внесенные изменения немедленно имплементировались в MariaD
+*/
+
+# Создание административного пользователя с аутентификацией по паролю - esli phpmyadmin to nad
+// phpmyadmin cherez root ne zajdet t.k. pwd-socket, a vot aqmin po parolju!
+
+$ sudo mariadb
+> GRANT ALL ON *.* TO 'aqmin'@'localhost' IDENTIFIED BY 'qwe123' WITH GRANT OPTION;
+> FLUSH PRIVILEGES;
+$ exit
+
+# Sozdanie usera dlya otdelnoj bazi
+> CREATE DATABASE www_domain;
+> SHOW DATABASES;
+
+> CREATE USER 'user1'@localhost IDENTIFIED BY 'm2r12db';
+> SELECT User FROM mysql.user; // prosmotr userov
+
+> GRANT ALL PRIVILEGES ON www_domain.* TO user1@localhost;
+> FLUSH PRIVILEGES;
+> SHOW GRANTS FOR user1@localhost; // pokazat prava
+
+# Remove MariaDB User Account
+> DROP USER user1@localhost;
+
+# Overview (Threads, Slow queries, etc.)
+$ sudo mysqladmin version
+$ mysqladmin -u admin -p version
+
+# Enter
+$ sudo mariadb OR $ mariadb -u aqmin -p
 
 # Шаг 3 — Установка PHP
 $ sudo apt install php-fpm php-mysql
