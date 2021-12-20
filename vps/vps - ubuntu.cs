@@ -13,6 +13,9 @@ https://www.digitalocean.com/community/tutorials/how-to-install-mariadb-on-ubunt
 # 3.2. Установка MariaDB в Ubuntu 20.04
 https://www.digitalocean.com/community/tutorials/how-to-install-mariadb-on-ubuntu-20-04-ru
 
+# 4 Установка и использование Composer в Ubuntu 20.04
+https://www.digitalocean.com/community/tutorials/how-to-install-and-use-composer-on-ubuntu-20-04-ru
+
 # ?. UFW Essentials: Common Firewall Rules and Commands
 https://www.digitalocean.com/community/tutorials/ufw-essentials-common-firewall-rules-and-commands
 
@@ -259,3 +262,26 @@ $ sudo rm /var/www/your_domain/info.php // remove
 # Шаг 6 — Тестирование подключения к базе данных для PHP
 
 # ------------- 3 ------------- #
+
+# ------------- 4 ------------- #
+# Шаг 1 — Установка PHP и необходимых зависимостей
+$ sudo apt update
+$ sudo apt install php-cli unzip
+
+# Шаг 2 — Загрузка и установка Composer
+$ cd ~
+$ curl -sS https://getcomposer.org/installer -o composer-setup.php
+
+$ HASH=`curl -sS https://composer.github.io/installer.sig`
+$ echo $HASH
+
+$ php -r "if (hash_file('SHA384', 'composer-setup.php') === '$HASH') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+// Output: Installer verified
+
+$ sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+$ composer
+
+# Обновление зависимостей !!!проекта!!!
+$ composer update // обновить зависимости проекта
+$ composer update vendor/package vendor2/package2 // бновить одну или несколько конкретных библиотек
+# ------------- 4 ------------- #
